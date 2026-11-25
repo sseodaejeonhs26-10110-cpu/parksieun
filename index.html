@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#147d70">
+  <title>아픈데어디가지 · 우리 주변 병원 찾기</title>
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="vendor/leaflet.js"></script>
+  <script defer src="hospitals.js"></script>
+  <script defer src="rules.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="처음으로"><span class="brand-icon">＋</span> 아픈데어디가지<span class="brand-dot">.</span></a>
+    <a class="header-link" href="#hospitals">병원 바로 찾기</a>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div><span class="eyebrow">우리 동네 건강 길잡이 · 대전 태평동</span>
+        <h1>아픈데,<br>어디로 가야 할까요?</h1>
+        <p>헷갈리는 증상은 간단한 질문으로.<br>진료과를 알아보고 우리 동네 병원을 찾아보세요.</p>
+        <a class="button primary" href="#check">내 증상 알아보기</a>
+        <span class="hero-note">회원가입 없이 · 입력 내용은 저장하지 않아요</span>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="art-orbit"></div><div class="art-card"><span class="art-cross">＋</span><span class="art-line"></span><span class="art-line short"></span><div class="art-heart">♡</div><span class="art-caption">괜찮아, 함께 찾아보자</span></div><span class="art-pill">우리 동네 병원 5곳</span></div>
+    </section>
+    <aside class="emergency-strip"><span>응급 신호가 있나요?</span> 심한 호흡곤란·가슴 통증·의식 저하는 <a href="tel:119">119</a>에 도움을 요청하세요.</aside>
+
+    <section id="check" class="section">
+      <div class="section-heading"><div><span class="eyebrow">STEP 01 · 증상 확인</span><h2>어디가 불편한가요?</h2><p>지금 가장 가까운 증상 하나를 골라 주세요.</p></div><span class="small-tag">간단한 문답</span></div>
+      <div id="symptoms" class="symptom-grid" role="group" aria-label="증상 선택"></div>
+      <div id="symptom-input" class="input-panel" hidden>
+        <label for="extra">더 불편한 곳이 있다면 적어 주세요 <span class="muted">(선택)</span></label>
+        <textarea id="extra" rows="2" maxlength="300" placeholder="예: 어제부터 열이 나고 머리가 아파요"></textarea>
+        <div class="input-bottom"><span id="keywords" class="muted">열, 구토, 두통, 호흡, 저림 등에 맞춰 추가로 질문해요.</span><button id="begin" class="button primary">질문 시작하기</button></div>
+      </div>
+      <section id="quiz" class="quiz-panel" hidden aria-labelledby="question-title">
+        <div class="quiz-top"><span id="question-step" class="eyebrow"></span><button id="reset-quiz" class="text-button">다시 선택</button></div>
+        <div class="progress"><div id="progress-fill"></div></div>
+        <p id="question-context" class="muted"></p><h3 id="question-title" tabindex="-1"></h3><div id="answers" class="answer-grid"></div>
+        <button id="previous" class="text-button">이전 질문</button>
+      </section>
+      <section id="result" class="result-panel" hidden aria-live="polite"></section>
+    </section>
+
+    <section id="hospitals" class="section hospital-section">
+      <div class="section-heading"><div><span class="eyebrow">STEP 02 · 병원 찾기</span><h2>가까운 병원을 확인해요</h2><p>대전 중구 태평동의 병원 5곳을 모았어요.</p></div><button id="locate" class="button secondary">내 위치로 거리 보기</button></div>
+      <div class="filter-bar"><div id="department-filters" class="filter-tabs" role="group" aria-label="진료과 필터"></div><label class="check-label"><input type="checkbox" id="only-open"> 시간표상 진료 중만</label></div>
+      <div class="time-bar"><span id="clock"></span><label class="check-label"><input type="checkbox" id="holiday"> 오늘이 공휴일이면 체크</label></div>
+      <p class="data-notice">실시간 영업 정보가 아닌 한국 시간 기준 시간표 계산이에요. 공휴일·임시 휴진·접수 마감은 자동 반영되지 않으니 방문 전 전화해 주세요.</p>
+      <p id="location-message" class="muted" role="status"></p>
+      <div class="hospital-layout"><div class="hospital-results"><p id="hospital-count" class="list-caption" aria-live="polite"></p><div id="hospital-list"></div></div><div class="map-column"><div id="map" aria-label="태평동 병원 지도"></div><p class="map-note">핀이나 병원 카드를 누르면 상세 정보가 열려요.<br>지도 로딩이 안 되면 카드의 ‘지도 보기’를 이용해 주세요.</p></div></div>
+      <p class="safety">참고용이며 정확한 정보는 병원에 확인하세요. 공개 자료 확인일: 2026. 11. 23. · 전화 확인은 진행하지 않았어요.</p>
+      <details class="sources"><summary>병원 정보 출처와 확인이 필요한 항목</summary><div id="source-list"></div><p>건강보험심사평가원·국립중앙의료원 자료를 재게시한 공개 병원 안내 페이지를 참고해 수동으로 정리했어요. 공공 API를 직접 연결한 서비스는 아니에요. 대표 시술은 확인되지 않아 임의로 넣지 않았어요.</p><p>문답은 기획서에 따른 조건문 기반 학습용 안내예요. 의료진의 검증을 거친 진단 도구가 아니며 다른 진료과가 필요할 수 있어요. 응급 신호와 어지러움 안내는 <a href="https://www.nhs.uk/symptoms/shortness-of-breath/" target="_blank" rel="noopener noreferrer">NHS 호흡곤란 안내</a>, <a href="https://www.nhs.uk/symptoms/dizziness/" target="_blank" rel="noopener noreferrer">NHS 어지러움 안내</a>를 참고했어요.</p></details>
+    </section>
+    <section class="help-card"><span class="help-cross">＋</span><div><h3>혼자 판단하기 어렵다면</h3><p>보호자나 보건 선생님께 지금 상태를 알려 주세요. 증상이 심해지면 문답 결과와 관계없이 의료진의 도움을 받으세요.</p></div><a href="https://www.e-gen.or.kr/egen/main.do" target="_blank" rel="noopener noreferrer" class="button secondary">응급의료포털 E-Gen</a></section>
+  </main>
+  <footer class="wrap footer"><strong>아픈데어디가지.</strong><span>기획·제작 박시은 · 10110 · 인공지능 수행평가</span><span>참고용이며 정확한 진단은 병원에서 받아야 해요.</span></footer>
+  <dialog id="detail"><div class="dialog-head"><span class="eyebrow">병원 상세 정보</span><button class="close-button" aria-label="상세 정보 닫기">×</button></div><div id="detail-content"></div></dialog>
+  <dialog id="emergency"><div class="dialog-head"><span class="emergency-label">응급 안내</span><button class="close-button" aria-label="응급 안내 닫기">×</button></div><h2>지금은 바로 도움을 요청하세요</h2><p>119에 전화하거나 가까운 응급실을 이용하세요. 주변 보호자나 선생님에게도 바로 알려 주세요.</p><a href="tel:119" class="button danger">119 전화하기</a><a href="https://www.e-gen.or.kr/egen/main.do" target="_blank" rel="noopener noreferrer" class="button secondary">응급실 찾기</a><p class="safety">참고용이며 정확한 진단은 병원에서 받아야 해요.</p></dialog>
+</body>
+</html>
